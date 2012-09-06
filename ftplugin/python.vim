@@ -86,6 +86,7 @@ endfunction
 
 function <SID>PythonInsert()
 	let l:import = substitute(expand("<cWORD>"), "\\.[^\.]*$", "", "")
+	let l:import = substitute(l:import, "^.*[(]", "", "")
 	if l:import == ""
 		let l:import = input("Module to import: ")
 		if l:import == ""
@@ -113,6 +114,7 @@ END
 	" Hook for dynamic imports
 	function <SID>DynamicPythonInsert()
 		let l:import = substitute(expand("<cWORD>"), "\\.[^\.]*$", "", "")
+		let l:import = substitute(l:import, "^.*[(]", "", "")
 		if l:import == ""
 			return
 		endif
