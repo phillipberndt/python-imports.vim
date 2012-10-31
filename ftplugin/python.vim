@@ -34,21 +34,21 @@ function g:PythonAddImport(import)
 
 	" First check if this already gets imported
 	call cursor(1, 1)
-	if search("^\[ \t\]*" . a:import . "\[ \t\]*$", "cn") != 0
+	if search("\\m^[ \t]*" . a:import . "[ \t]*$", "cn") != 0
 		call setpos(".", l:oldpos)
 		return
 	end
 
 	" Locate the first import line
 	call cursor(1, 1)
-	let l:firstImport = search("^\[ \t\]*\(from\|import\)\[ \t\]", "cn")
+	let l:firstImport = search("\\m^[ \t]*\\(from\\|import\\)[ \t]", "cn")
 	if l:firstImport == 0
 		" Search for the first non-comment line and use that one
 		call cursor(1, 1)
 		let l:firstImport = 1
 		while 1
 			let l:firstImport += 1
-			let l:found = search("^\[ \t\]*#", "", line("$"))
+			let l:found = search("\\m^[ \t]*#", "", line("$"))
 			if l:found == 0 || l:found > l:firstImport
 				break
 			end
@@ -68,7 +68,7 @@ function g:PythonAddImport(import)
 	call cursor(l:firstImport, 1)
 	let l:lastImport = l:firstImport
 	while 1
-		let l:found = search("^\[ \t\]*\(from\|import\)\[ \t\]", "", line("$"))
+		let l:found = search("\\m^[ \t]*\\(from\\|import\\)[ \t]", "", line("$"))
 		if l:found == 0 || l:found > l:lastImport + 1
 			break
 		end
@@ -85,8 +85,9 @@ function g:PythonAddImport(import)
 endfunction
 
 function <SID>PythonInsert()
-	let l:import = substitute(expand("<cWORD>"), "\\.[^\.]*$", "", "")
-	let l:import = substitute(l:import, "^.*[(]", "", "")
+	let l:import = substitute(expand("<cWORD>"), "\\m\\.[^\\.]*$", "", "")
+	let l:import = substitute(l:import, "\\m^.*[(]", "", "")
+	let l:import = substitute(l:import, "\\m\\W\\+$", "", "")
 	if l:import == ""
 		let l:import = input("Module to import: ")
 		if l:import == ""
@@ -113,8 +114,9 @@ END
 
 	" Hook for dynamic imports
 	function <SID>DynamicPythonInsert()
-		let l:import = substitute(expand("<cWORD>"), "\\.[^\.]*$", "", "")
-		let l:import = substitute(l:import, "^.*[(]", "", "")
+		let l:import = substitute(expand("<cWORD>"), "\\m\\.[^\\.]*$", "", "")
+		let l:import = substitute(l:import, "\\m^.*[(]", "", "")
+		let l:import = substitute(l:import, "\\m\\W\\+$", "", "")
 		if l:import == ""
 			return
 		endif
