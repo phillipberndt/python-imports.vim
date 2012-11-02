@@ -1,7 +1,7 @@
 " Python import management
 " Vim plugin
 "
-" Version: 0.1
+" Version: 0.2
 " Licence: VIM licence
 "
 " Copyright (c) 2012, Phillip Berndt
