@@ -88,6 +88,9 @@ function <SID>PythonInsert()
 	let l:import = substitute(expand("<cWORD>"), "\\m\\.[^\\.]*$", "", "")
 	let l:import = substitute(l:import, "\\m^.*[(]", "", "")
 	let l:import = substitute(l:import, "\\m\\W\\+$", "", "")
+	if match(l:import, "[^A-Za-z0-9_.-]") != -1
+		let l:import = ""
+	end
 	if l:import == ""
 		let l:import = input("Module to import: ")
 		if l:import == ""
